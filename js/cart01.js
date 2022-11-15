@@ -88,20 +88,59 @@ function calcCartTotalCost() {
       parseInt(item.querySelector('[data-counter]').innerText) *
       parseInt(item.querySelector('.price__currency').innerText);
   });
-  
+
   if (totalCost < freeDeliveryMark) {
     deliveryCost.classList.remove('free');
     deliveryCost.innerHTML = `${deliveryPrice} ₴ <br/><small class="delivery-mark">Безкоштовно при замовленні від ${freeDeliveryMark}  ₴</small>`;
     document
-    .querySelector('.cart-total')
-    .querySelector('.total-price').innerHTML = totalCost+ ' ₴, <span class="delivery-mark"> з доставкою '+ (totalCost+deliveryPrice)+'</span>';
-    document.querySelector('.hryvna').classList='delivery-mark'
+      .querySelector('.cart-total')
+      .querySelector('.total-price').innerHTML =
+      totalCost +
+      ' ₴, <span class="delivery-mark"> з доставкою ' +
+      (totalCost + deliveryPrice) +
+      '</span>';
+    document.querySelector('.hryvna').classList = 'delivery-mark';
   } else {
     deliveryCost.classList.add('free');
     deliveryCost.innerText = 'безкоштовно';
     document
-    .querySelector('.cart-total')
-    .querySelector('.total-price').innerText = totalCost;
-    document.querySelector('.delivery-mark').classList='hryvna'
+      .querySelector('.cart-total')
+      .querySelector('.total-price').innerText = totalCost;
+    document.querySelector('.delivery-mark').classList = 'hryvna';
   }
 }
+
+//slider vars and functions
+let slideStep = 0;
+let slideNumber = 0;
+function sliderChanger(event, eventAction, productsArray) {
+  const productsCount = productsArray.length - 1;
+  const sliderLine = document.querySelector('.products-slider-item');
+  const sliderLineLength = sliderLine.offsetWidth;
+  // console.log(sliderLineLength);
+  if (eventAction === 'slide-left') {
+    slideNumber--;
+    // console.log(slideNumber);
+    if (slideNumber < 0) {
+      slideNumber = productsCount;
+      // console.log(slideNumber);
+      slideStep = -productsCount * sliderLineLength;
+    } else {
+      slideStep += sliderLineLength;
+    }
+    sliderTohCange.style.marginLeft = slideStep + 'px';
+  } else if (eventAction === 'slide-right') {
+    slideNumber++;
+    if (slideNumber > productsCount) {
+      slideNumber = 0;
+      slideStep = 0;
+    } else {
+      slideStep -= sliderLineLength;
+    }
+    sliderTohCange.style.marginLeft = slideStep + 'px';
+  }
+}
+
+setInterval(() => {
+  sliderChanger(null, 'slide-right', productsArray)
+}, 4000);
